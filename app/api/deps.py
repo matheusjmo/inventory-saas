@@ -48,11 +48,15 @@ def get_get_product(session: SessionDep) -> GetProduct:
 
 
 def get_register_inventory_item(session: SessionDep) -> RegisterInventoryItem:
-    return RegisterInventoryItem(SqlInventoryRepository(session), SqlProductRepository(session))
+    return RegisterInventoryItem(
+        SqlInventoryRepository(session), SqlProductRepository(session)
+    )
 
 
 def get_apply_movement(session: SessionDep) -> ApplyStockMovement:
-    return ApplyStockMovement(SqlInventoryRepository(session), SqlStockMovementRepository(session))
+    return ApplyStockMovement(
+        SqlInventoryRepository(session), SqlStockMovementRepository(session)
+    )
 
 
 def get_get_inventory_item(session: SessionDep) -> GetInventoryItem:

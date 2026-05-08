@@ -6,7 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.domain.product.entity import Product
 from app.domain.product.repository import ProductRepository
 from app.domain.product.value_objects import Category
-from app.domain.shared.value_objects import Price, SKU
+from app.domain.shared.value_objects import SKU, Price
 from app.infrastructure.db.models.product import ProductORM
 
 

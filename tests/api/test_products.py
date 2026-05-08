@@ -1,6 +1,4 @@
-import pytest
 from httpx import AsyncClient
-
 
 PRODUCT_PAYLOAD = {
     "sku": "SHOE-001",
@@ -53,13 +51,18 @@ async def test_get_product_not_found(client: AsyncClient):
 
 async def test_update_price(client: AsyncClient):
     await client.post("/products", json=PRODUCT_PAYLOAD)
-    response = await client.patch("/products/SHOE-001/price", json={"new_price": "299.99", "currency": "USD"})
+    response = await client.patch(
+        "/products/SHOE-001/price",
+        json={"new_price": "299.99", "currency": "USD"},
+    )
     assert response.status_code == 200
     assert response.json()["price"] == "299.99"
 
 
 async def test_rename_product(client: AsyncClient):
     await client.post("/products", json=PRODUCT_PAYLOAD)
-    response = await client.patch("/products/SHOE-001/name", json={"new_name": "Air Max 2"})
+    response = await client.patch(
+        "/products/SHOE-001/name", json={"new_name": "Air Max 2"}
+    )
     assert response.status_code == 200
     assert response.json()["name"] == "Air Max 2"

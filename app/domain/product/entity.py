@@ -1,8 +1,8 @@
 from dataclasses import dataclass, field
 from uuid import UUID, uuid4
 
-from app.domain.shared.value_objects import Price, SKU
 from app.domain.product.value_objects import Category
+from app.domain.shared.value_objects import SKU, Price
 
 
 @dataclass

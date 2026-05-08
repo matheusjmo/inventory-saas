@@ -83,7 +83,9 @@ async def update_price(
 ):
     try:
         product = await use_case.execute(
-            UpdatePriceCommand(sku=sku, new_price=body.new_price, currency=body.currency)
+            UpdatePriceCommand(
+                sku=sku, new_price=body.new_price, currency=body.currency
+            )
         )
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))
@@ -97,7 +99,9 @@ async def rename_product(
     use_case: RenameProduct = Depends(get_rename_product),
 ):
     try:
-        product = await use_case.execute(RenameProductCommand(sku=sku, new_name=body.new_name))
+        product = await use_case.execute(
+            RenameProductCommand(sku=sku, new_name=body.new_name)
+        )
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))
     return _to_response(product)

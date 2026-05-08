@@ -98,7 +98,10 @@ async def apply_movement(
         items = await use_case.execute(
             ApplyMovementCommand(
                 movement_type=body.movement_type,
-                lines=[MovementLineCommand(sku=l.sku, quantity=l.quantity) for l in body.lines],
+                lines=[
+                    MovementLineCommand(sku=line.sku, quantity=line.quantity)
+                    for line in body.lines
+                ],
             )
         )
     except ValueError as e:
