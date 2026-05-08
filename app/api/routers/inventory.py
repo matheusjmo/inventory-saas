@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 
 from app.api.deps import (
     get_apply_movement,
@@ -56,16 +56,13 @@ async def register_inventory_item(
     body: RegisterInventoryItemRequest,
     use_case: RegisterInventoryItem = Depends(get_register_inventory_item),
 ):
-    try:
-        item = await use_case.execute(
-            RegisterInventoryItemCommand(
-                sku=body.sku,
-                initial_quantity=body.initial_quantity,
-                unit=body.unit,
-            )
+    item = await use_case.execute(
+        RegisterInventoryItemCommand(
+            sku=body.sku,
+            initial_quantity=body.initial_quantity,
+            unit=body.unit,
         )
-    except ValueError as e:
-        raise HTTPException(status_code=422, detail=str(e))
+    )
     return _item_to_response(item)
 
 
@@ -73,8 +70,7 @@ async def register_inventory_item(
 async def list_inventory_items(
     use_case: ListInventoryItems = Depends(get_list_inventory_items),
 ):
-    items = await use_case.execute()
-    return [_item_to_response(i) for i in items]
+    return [_item_to_response(i) for i in await use_case.execute()]
 
 
 @router.get("/{sku}", response_model=InventoryItemResponse)
@@ -82,11 +78,7 @@ async def get_inventory_item(
     sku: str,
     use_case: GetInventoryItem = Depends(get_get_inventory_item),
 ):
-    try:
-        item = await use_case.execute(sku)
-    except ValueError as e:
-        raise HTTPException(status_code=404, detail=str(e))
-    return _item_to_response(item)
+    return _item_to_response(await use_case.execute(sku))
 
 
 @router.post("/movements", response_model=list[InventoryItemResponse], status_code=201)
@@ -94,18 +86,15 @@ async def apply_movement(
     body: ApplyMovementRequest,
     use_case: ApplyStockMovement = Depends(get_apply_movement),
 ):
-    try:
-        items = await use_case.execute(
-            ApplyMovementCommand(
-                movement_type=body.movement_type,
-                lines=[
-                    MovementLineCommand(sku=line.sku, quantity=line.quantity)
-                    for line in body.lines
-                ],
-            )
+    items = await use_case.execute(
+        ApplyMovementCommand(
+            movement_type=body.movement_type,
+            lines=[
+                MovementLineCommand(sku=line.sku, quantity=line.quantity)
+                for line in body.lines
+            ],
         )
-    except ValueError as e:
-        raise HTTPException(status_code=422, detail=str(e))
+    )
     return [_item_to_response(i) for i in items]
 
 

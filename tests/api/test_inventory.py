@@ -31,7 +31,7 @@ async def test_register_inventory_item_product_not_found(client: AsyncClient):
     response = await client.post(
         "/inventory", json={"sku": "NOTEXIST", "initial_quantity": 0}
     )
-    assert response.status_code == 422
+    assert response.status_code == 404
 
 
 async def test_register_inventory_item_duplicate(client: AsyncClient):
@@ -40,7 +40,7 @@ async def test_register_inventory_item_duplicate(client: AsyncClient):
     response = await client.post(
         "/inventory", json={"sku": "SHOE-001", "initial_quantity": 0}
     )
-    assert response.status_code == 422
+    assert response.status_code == 409
 
 
 async def test_list_inventory_items(client: AsyncClient):

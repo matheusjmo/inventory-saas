@@ -21,7 +21,7 @@ async def test_create_product(client: AsyncClient):
 async def test_create_product_duplicate_sku(client: AsyncClient):
     await client.post("/products", json=PRODUCT_PAYLOAD)
     response = await client.post("/products", json=PRODUCT_PAYLOAD)
-    assert response.status_code == 422
+    assert response.status_code == 409
 
 
 async def test_list_products_empty(client: AsyncClient):

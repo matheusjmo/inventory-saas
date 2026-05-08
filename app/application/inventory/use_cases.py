@@ -1,3 +1,4 @@
+from app.domain.exceptions import AlreadyExistsError, NotFoundError
 from app.domain.inventory.inventory_item import InventoryItem
 from app.domain.inventory.repository import InventoryRepository, StockMovementRepository
 from app.domain.inventory.service import InventoryDomainService
@@ -22,10 +23,12 @@ class RegisterInventoryItem:
         sku = SKU(cmd.sku)
 
         if await self._product_repo.get_by_sku(sku) is None:
-            raise ValueError(f"Product with SKU {sku.code} not found")
+            raise NotFoundError(f"Product with SKU {sku.code} not found")
 
         if await self._inventory_repo.get_by_sku(sku) is not None:
-            raise ValueError(f"Inventory item for SKU {sku.code} already exists")
+            raise AlreadyExistsError(
+                f"Inventory item for SKU {sku.code} already exists"
+            )
 
         item = InventoryItem(
             sku=sku,
@@ -61,7 +64,7 @@ class GetInventoryItem:
     async def execute(self, sku: str) -> InventoryItem:
         item = await self._repo.get_by_sku(SKU(sku))
         if item is None:
-            raise ValueError(f"No inventory item found for SKU {sku}")
+            raise NotFoundError(f"No inventory item found for SKU {sku}")
         return item
 
 

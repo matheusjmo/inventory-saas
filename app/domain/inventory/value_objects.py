@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 from enum import Enum
 
+from app.domain.exceptions import DomainValidationError
+
 
 class MovementType(Enum):
     IN = "in"
@@ -23,5 +25,5 @@ class Quantity:
     def __sub__(self, other: "Quantity") -> "Quantity":
         result = self.value - other.value
         if result < 0:
-            raise ValueError("Resulting quantity cannot be negative")
+            raise DomainValidationError("Resulting quantity cannot be negative")
         return Quantity(result, self.unit)

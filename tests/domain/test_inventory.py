@@ -1,5 +1,6 @@
 import pytest
 
+from app.domain.exceptions import DomainValidationError
 from app.domain.inventory.inventory_item import InventoryItem
 from app.domain.inventory.stock_movement import MovementLine, StockMovement
 from app.domain.inventory.value_objects import MovementType, Quantity
@@ -24,7 +25,7 @@ def test_quantity_sub():
 
 
 def test_quantity_sub_rejects_going_negative():
-    with pytest.raises(ValueError):
+    with pytest.raises(DomainValidationError):
         Quantity(5) - Quantity(10)
 
 
@@ -48,7 +49,7 @@ def test_apply_movement_adjustment():
 
 def test_apply_movement_out_cannot_go_negative():
     item = make_item(5)
-    with pytest.raises(ValueError):
+    with pytest.raises(DomainValidationError):
         item.apply(Quantity(10), MovementType.OUT)
 
 
