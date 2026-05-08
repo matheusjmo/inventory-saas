@@ -72,8 +72,8 @@ class ListInventoryItems:
     def __init__(self, repo: InventoryRepository) -> None:
         self._repo = repo
 
-    async def execute(self) -> list[InventoryItem]:
-        return await self._repo.list_all()
+    async def execute(self, limit: int = 20, offset: int = 0) -> list[InventoryItem]:
+        return await self._repo.list_all(limit=limit, offset=offset)
 
 
 class GetMovementHistory:

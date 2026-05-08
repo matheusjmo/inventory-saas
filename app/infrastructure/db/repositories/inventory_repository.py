@@ -73,8 +73,10 @@ class SqlInventoryRepository(InventoryRepository):
             row.quantity = item.quantity.value
             row.unit = item.quantity.unit
 
-    async def list_all(self) -> list[InventoryItem]:
-        result = await self._session.execute(select(InventoryItemORM))
+    async def list_all(self, limit: int = 20, offset: int = 0) -> list[InventoryItem]:
+        result = await self._session.execute(
+            select(InventoryItemORM).limit(limit).offset(offset)
+        )
         return [_item_to_domain(row) for row in result.scalars().all()]
 
 

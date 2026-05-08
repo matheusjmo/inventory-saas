@@ -58,8 +58,8 @@ class ListProducts:
     def __init__(self, repo: ProductRepository) -> None:
         self._repo = repo
 
-    async def execute(self) -> list[Product]:
-        return await self._repo.list_all()
+    async def execute(self, limit: int = 20, offset: int = 0) -> list[Product]:
+        return await self._repo.list_all(limit=limit, offset=offset)
 
 
 class GetProduct:

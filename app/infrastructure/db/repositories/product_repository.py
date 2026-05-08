@@ -63,6 +63,8 @@ class SqlProductRepository(ProductRepository):
             row.currency = product.price.currency
             row.category = product.category.name
 
-    async def list_all(self) -> list[Product]:
-        result = await self._session.execute(select(ProductORM))
+    async def list_all(self, limit: int = 20, offset: int = 0) -> list[Product]:
+        result = await self._session.execute(
+            select(ProductORM).limit(limit).offset(offset)
+        )
         return [_to_domain(row) for row in result.scalars().all()]

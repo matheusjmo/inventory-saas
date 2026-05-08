@@ -68,9 +68,14 @@ async def register_inventory_item(
 
 @router.get("", response_model=list[InventoryItemResponse])
 async def list_inventory_items(
+    limit: int = 20,
+    offset: int = 0,
     use_case: ListInventoryItems = Depends(get_list_inventory_items),
 ):
-    return [_item_to_response(i) for i in await use_case.execute()]
+    return [
+        _item_to_response(i)
+        for i in await use_case.execute(limit=limit, offset=offset)
+    ]
 
 
 @router.get("/{sku}", response_model=InventoryItemResponse)

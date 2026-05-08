@@ -58,8 +58,12 @@ async def create_product(
 
 
 @router.get("", response_model=list[ProductResponse])
-async def list_products(use_case: ListProducts = Depends(get_list_products)):
-    return [_to_response(p) for p in await use_case.execute()]
+async def list_products(
+    limit: int = 20,
+    offset: int = 0,
+    use_case: ListProducts = Depends(get_list_products),
+):
+    return [_to_response(p) for p in await use_case.execute(limit=limit, offset=offset)]
 
 
 @router.get("/{sku}", response_model=ProductResponse)

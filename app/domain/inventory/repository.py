@@ -17,7 +17,9 @@ class InventoryRepository(ABC):
     async def save(self, item: InventoryItem) -> None: ...
 
     @abstractmethod
-    async def list_all(self) -> list[InventoryItem]: ...
+    async def list_all(
+        self, limit: int = 20, offset: int = 0
+    ) -> list[InventoryItem]: ...
 
 
 class StockMovementRepository(ABC):
